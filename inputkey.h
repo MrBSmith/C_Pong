@@ -6,6 +6,7 @@
 
 typedef enum input {UP, DOWN, RIGHT, LEFT, CONFIRM, CANCEL} input;
 typedef enum input_state {RELEASED, PRESSED} input_state;
+typedef enum move_flag {BOTH, VERTICAL, HORIZONTAL} move_flag;
 
 typedef struct input_manager {
     input_state input_state_array[6];
@@ -21,6 +22,6 @@ void print_input(input inp);
 input_manager* SDL_CreateInputManager();
 
 // Move the given rect accordingly to the input of the player
-void move_character(input_manager* p_input_manager, SDL_Rect* p_rect, int move_speed);
+void move_player(input_manager* p_input_manager, SDL_Rect* p_rect, int move_speed, move_flag flag);
 
 #endif // INPUTKEY_H_INCLUDED

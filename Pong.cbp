@@ -36,9 +36,57 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="SDL_event.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SDL_event.h" />
+		<Unit filename="SDL_manager.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="SDL_manager.h" />
+		<Unit filename="animation.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="animation.h" />
+		<Unit filename="camera.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="camera.h" />
+		<Unit filename="cercle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="cercle.h" />
+		<Unit filename="color.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="color.h" />
+		<Unit filename="delta.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="delta.h" />
+		<Unit filename="inputkey.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="inputkey.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="map.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="map.h" />
+		<Unit filename="paddle.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="paddle.h" />
+		<Unit filename="tileset.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="tileset.h" />
+		<Unit filename="vector.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="vector.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

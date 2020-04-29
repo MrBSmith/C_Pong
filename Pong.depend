@@ -402,16 +402,16 @@
 1584977924 d:\projets programmation\pong\pong\delta.h
 	<SDL.h>
 
-1586436729 source:d:\projets programmation\pong\pong\inputkey.c
+1588154903 source:d:\projets programmation\pong\pong\inputkey.c
 	<stdio.h>
 	<stdlib.h>
 	"inputkey.h"
 
-1586437479 d:\projets programmation\pong\pong\inputkey.h
+1588154918 d:\projets programmation\pong\pong\inputkey.h
 	<SDL.h>
 	"vector.h"
 
-1588150078 source:d:\projets programmation\pong\pong\main.c
+1588153816 source:d:\projets programmation\pong\pong\main.c
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
@@ -425,6 +425,7 @@
 	"map.h"
 	"inputkey.h"
 	"SDL_event.h"
+	"paddle.h"
 
 1586336705 d:\projets programmation\pong\pong\map.h
 	<stdio.h>
@@ -467,4 +468,9 @@
 
 1586339647 source:d:\projets programmation\pong\pong\vector.c
 	"vector.h"
+
+1588151015 source:d:\projets programmation\pong\pong\paddle.c
+	"paddle.h"
+
+1588151003 d:\projets programmation\pong\pong\paddle.h
 

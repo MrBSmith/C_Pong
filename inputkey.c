@@ -70,22 +70,25 @@ input_manager* SDL_CreateInputManager(){
 
 
 // Respond to the input of the player by moving the character
-void move_character(input_manager* p_input_manager, SDL_Rect* p_rect, int move_speed){
+void move_player(input_manager* p_input_manager, SDL_Rect* p_rect, int move_speed, move_flag flag){
 
-    if(p_input_manager -> input_state_array[UP] == PRESSED){
-        p_rect -> y -= move_speed;
+    if(flag != HORIZONTAL){
+        if(p_input_manager -> input_state_array[UP] == PRESSED){
+            p_rect -> y -= move_speed;
+        }
+
+        if(p_input_manager -> input_state_array[DOWN] == PRESSED){
+            p_rect -> y += move_speed;
+        }
     }
 
-    if(p_input_manager -> input_state_array[DOWN] == PRESSED){
-        p_rect -> y += move_speed;
-    }
+    if(flag != VERTICAL){
+        if(p_input_manager -> input_state_array[LEFT] == PRESSED){
+            p_rect -> x -= move_speed;
+        }
 
-    if(p_input_manager -> input_state_array[LEFT] == PRESSED){
-        p_rect -> x -= move_speed;
-    }
-
-    if(p_input_manager -> input_state_array[RIGHT] == PRESSED){
-        p_rect -> x += move_speed;
+        if(p_input_manager -> input_state_array[RIGHT] == PRESSED){
+            p_rect -> x += move_speed;
+        }
     }
 }
-
