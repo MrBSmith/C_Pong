@@ -16,9 +16,6 @@
 #include "paddle.h"
 #include "PhysicsBody.h"
 
-#define FALSE 0
-#define TRUE 1
-
 int main(int argc, char *argv[])
 {
     // The frames per seconds
@@ -39,11 +36,12 @@ int main(int argc, char *argv[])
     // Get the screen size, in order to manage the size & position of each bricks dynamicly
     int screen_width, screen_height;
     SDL_GetWindowSize(p_SDL_manager -> p_window, &screen_width, &screen_height);
+    SDL_Rect screen_rect = {0, 0, screen_width, screen_height};
 
     int paddle_offset = 50;
 
     vector2 VECTOR_2_ZERO = {0, 0};
-    vector2 ball_initial_velocity = {5, 0};
+    vector2 ball_initial_velocity = {0, 5};
 
     // Initialize the paddles
     SDL_Rect paddle_rect1 = {paddle_offset + 5, (screen_height - 40) / 2, 10, 40};
@@ -88,11 +86,17 @@ int main(int argc, char *argv[])
         move_player(p_input_manager_p2, p_paddle2 -> p_shape, 10, VERTICAL);
 
         int collisions_reported = 0;
-        if(check_collision(p_ball -> p_shape, p_paddle1 -> p_shape) == TRUE) {collisions_reported += 1; }
-        if(check_collision(p_ball -> p_shape, p_paddle2 -> p_shape) == TRUE) {collisions_reported += 1; }
+        if(check_collision(p_ball -> p_shape, p_paddle1 -> p_shape, SDL_TRUE) != NULL) {collisions_reported += 1;}
+        if(check_collision(p_ball -> p_shape, p_paddle2 -> p_shape, SDL_TRUE) != NULL) {collisions_reported += 1;}
 
         if(collisions_reported > 0){
+            printf("Collision detected\n");
             p_ball -> velocity.x *= -1;
+        }
+
+        if(check_collision(p_ball -> p_shape, &screen_rect, SDL_FALSE) != NULL) {
+            printf("Collision with a wall detected\n");
+            p_ball -> velocity.y *= -1;
         }
 
         //// RENDERING ////
