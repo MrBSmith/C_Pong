@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     int paddle_offset = 50;
 
     vector2 VECTOR_2_ZERO = {0, 0};
-    vector2 ball_initial_velocity = {10, 0};
+    vector2 ball_initial_velocity = {5, 0};
 
     // Initialize the paddles
     SDL_Rect paddle_rect1 = {paddle_offset + 5, (screen_height - 40) / 2, 10, 40};
@@ -87,12 +87,12 @@ int main(int argc, char *argv[])
         move_player(p_input_manager_p1, p_paddle1 -> p_shape, 10, VERTICAL);
         move_player(p_input_manager_p2, p_paddle2 -> p_shape, 10, VERTICAL);
 
-        int collision = FALSE;
-        collision = check_collision(p_ball -> p_shape, p_paddle1 -> p_shape);
-        collision = check_collision(p_ball -> p_shape, p_paddle2 -> p_shape);
+        int collisions_reported = 0;
+        if(check_collision(p_ball -> p_shape, p_paddle1 -> p_shape) == TRUE) {collisions_reported += 1; }
+        if(check_collision(p_ball -> p_shape, p_paddle2 -> p_shape) == TRUE) {collisions_reported += 1; }
 
-        if(collision == TRUE){
-            printf("A collision occured");
+        if(collisions_reported > 0){
+            p_ball -> velocity.x *= -1;
         }
 
         //// RENDERING ////

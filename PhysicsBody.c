@@ -19,7 +19,7 @@ void apply_velocity(physics_body* p_body){
 
 // Check for a collision between the p_shape1 and the p_shape2, return true if there is a collision
 int check_collision(SDL_Rect* p_shape1, SDL_Rect* p_shape2){
-    int result = FALSE;
+    int result = TRUE;
 
     int top1, left1, right1, bottom1;
     int top2, left2, right2, bottom2;
@@ -33,8 +33,18 @@ int check_collision(SDL_Rect* p_shape1, SDL_Rect* p_shape2){
     bottom1 = top1 + p_shape1 -> h;
     bottom2 = top2 + p_shape2 -> h;
 
-    if(right1 > left2 && left1 < right2 && bottom1 > top2 && top1 < bottom2){
-        result = TRUE;
+    if(bottom1 <= top2){
+        result = FALSE;
     }
+    if(top1 >= bottom2){
+        result = FALSE;
+    }
+    if(right1 <= left2){
+        result = FALSE;
+    }
+    if(left1 >= right2){
+        result = FALSE;
+    }
+
     return result;
 }

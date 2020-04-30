@@ -36,6 +36,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="PhysicsBody.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="PhysicsBody.h" />
 		<Unit filename="SDL_event.c">
 			<Option compilerVar="CC" />
 		</Unit>
