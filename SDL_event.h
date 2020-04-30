@@ -4,6 +4,6 @@
 #include <SDL.h>
 #include "inputkey.h"
 
-int events_manager(input_manager* p_input_manager);
+int events_manager(player_input_manager* input_manager_array[], int nb_players);
 
 #endif // SDL_EVENT_H_INCLUDED

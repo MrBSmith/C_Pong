@@ -4,29 +4,28 @@
 #include "inputkey.h"
 
 // Get the input from the player, and return it
-input get_input(int sym){
+input get_player_input(int sym, player_input_map input_map){
     input control;
-    switch(sym){
-        case SDLK_z:
-            control = UP; break;
+    if (sym == input_map.up){
+        control = UP;
 
-        case SDLK_q:
-            control = LEFT; break;
+    } else if (sym == input_map.left){
+        control = LEFT;
 
-        case SDLK_d:
-            control = RIGHT; break;
+    } else if (sym == input_map.right){
+        control = RIGHT;
 
-        case SDLK_s:
-            control = DOWN; break;
+    } else if (sym == input_map.down){
+        control = DOWN;
 
-        case SDLK_v:
-            control = CONFIRM; break;
+    } else if (sym == input_map.confirm){
+        control = CONFIRM;
 
-        case SDLK_n:
-            control = CANCEL; break;
+    } else if (sym == input_map.cancel){
+        control = CANCEL;
 
-        default :
-             break;
+    } else {
+        control = NONE;
     }
     return control;
 }
@@ -55,9 +54,9 @@ void print_input(input inp){
 
 
 // Procedure for input manager creation
-input_manager* SDL_CreateInputManager(){
+player_input_manager* SDL_CreateInputManager(int up, int down, int left, int right, int confirm, int cancel){
 
-    input_manager* p_inp_manager = malloc(sizeof(input_manager));
+    player_input_manager* p_inp_manager = malloc(sizeof(player_input_manager));
     int input_nb = sizeof(p_inp_manager -> input_state_array) / sizeof(int);
 
     // Loop through the array of input and set them all to
@@ -65,29 +64,36 @@ input_manager* SDL_CreateInputManager(){
         p_inp_manager -> input_state_array[i] = RELEASED;
     }
 
+    p_inp_manager -> input_map.up = up;
+    p_inp_manager -> input_map.down = down;
+    p_inp_manager -> input_map.left = left;
+    p_inp_manager -> input_map.right = right;
+    p_inp_manager -> input_map.confirm = confirm;
+    p_inp_manager -> input_map.cancel = cancel;
+
     return p_inp_manager;
 }
 
 
 // Respond to the input of the player by moving the character
-void move_player(input_manager* p_input_manager, SDL_Rect* p_rect, int move_speed, move_flag flag){
+void move_player(player_input_manager* p_player_input_manager, SDL_Rect* p_rect, int move_speed, move_flag flag){
 
     if(flag != HORIZONTAL){
-        if(p_input_manager -> input_state_array[UP] == PRESSED){
+        if(p_player_input_manager -> input_state_array[UP] == PRESSED){
             p_rect -> y -= move_speed;
         }
 
-        if(p_input_manager -> input_state_array[DOWN] == PRESSED){
+        if(p_player_input_manager -> input_state_array[DOWN] == PRESSED){
             p_rect -> y += move_speed;
         }
     }
 
     if(flag != VERTICAL){
-        if(p_input_manager -> input_state_array[LEFT] == PRESSED){
+        if(p_player_input_manager -> input_state_array[LEFT] == PRESSED){
             p_rect -> x -= move_speed;
         }
 
-        if(p_input_manager -> input_state_array[RIGHT] == PRESSED){
+        if(p_player_input_manager -> input_state_array[RIGHT] == PRESSED){
             p_rect -> x += move_speed;
         }
     }

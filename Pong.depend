@@ -377,7 +377,7 @@
 	<stdlib.h>
 	"vector.h"
 
-1586339925 d:\projets programmation\pong\pong\vector.h
+1588241638 d:\projets programmation\pong\pong\vector.h
 
 1584120284 source:d:\projets programmation\pong\pong\cercle.c
 	"cercle.h"
@@ -402,16 +402,16 @@
 1584977924 d:\projets programmation\pong\pong\delta.h
 	<SDL.h>
 
-1588154903 source:d:\projets programmation\pong\pong\inputkey.c
+1588170921 source:d:\projets programmation\pong\pong\inputkey.c
 	<stdio.h>
 	<stdlib.h>
 	"inputkey.h"
 
-1588154918 d:\projets programmation\pong\pong\inputkey.h
+1588259225 d:\projets programmation\pong\pong\inputkey.h
 	<SDL.h>
 	"vector.h"
 
-1588153816 source:d:\projets programmation\pong\pong\main.c
+1588259635 source:d:\projets programmation\pong\pong\main.c
 	<stdio.h>
 	<stdlib.h>
 	<SDL.h>
@@ -426,6 +426,7 @@
 	"inputkey.h"
 	"SDL_event.h"
 	"paddle.h"
+	"PhysicsBody.h"
 
 1586336705 d:\projets programmation\pong\pong\map.h
 	<stdio.h>
@@ -434,7 +435,7 @@
 	"tileset.h"
 	"camera.h"
 
-1586435848 d:\projets programmation\pong\pong\sdl_event.h
+1588169124 d:\projets programmation\pong\pong\sdl_event.h
 	<SDL.h>
 	"inputkey.h"
 
@@ -457,7 +458,7 @@
 	<stdlib.h>
 	<SDL.h>
 
-1586437814 source:d:\projets programmation\pong\pong\sdl_event.c
+1588170760 source:d:\projets programmation\pong\pong\sdl_event.c
 	"SDL_event.h"
 
 1586423472 source:d:\projets programmation\pong\pong\sdl_manager.c
@@ -473,4 +474,21 @@
 	"paddle.h"
 
 1588151003 d:\projets programmation\pong\pong\paddle.h
+
+1588164719 source:d:\projets programmation\pong\pong\bricks.c
+	"bricks.h"
+
+1588164729 d:\projets programmation\pong\pong\bricks.h
+	<stdio.h>
+	<stdlib.h>
+	<SDL.h>
+
+1588259549 source:d:\projets programmation\pong\pong\physicsbody.c
+	"PhysicsBody.h"
+
+1588259702 d:\projets programmation\pong\pong\physicsbody.h
+	<stdio.h>
+	<stdlib.h>
+	<SDL.h>
+	"vector.h"
 

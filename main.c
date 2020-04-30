@@ -14,10 +14,14 @@
 #include "SDL_event.h"
 
 #include "paddle.h"
+#include "PhysicsBody.h"
+
+#define FALSE 0
+#define TRUE 1
 
 int main(int argc, char *argv[])
 {
-    // The frames per second
+    // The frames per seconds
     const int FPS = 20;
 
     SDL_manager* p_SDL_manager = SDL_InitManager();
@@ -32,49 +36,89 @@ int main(int argc, char *argv[])
         printf("IMG_Init: %s\n", IMG_GetError());
     }
 
-    // Initialize the paddle
-    SDL_Rect paddle = {300, 400, 40, 10};
+    // Get the screen size, in order to manage the size & position of each bricks dynamicly
+    int screen_width, screen_height;
+    SDL_GetWindowSize(p_SDL_manager -> p_window, &screen_width, &screen_height);
 
-    // Definit les variables necessaires a la boucle principale
+    int paddle_offset = 50;
+
+    vector2 VECTOR_2_ZERO = {0, 0};
+    vector2 ball_initial_velocity = {10, 0};
+
+    // Initialize the paddles
+    SDL_Rect paddle_rect1 = {paddle_offset + 5, (screen_height - 40) / 2, 10, 40};
+    SDL_Rect paddle_rect2 = {screen_width - paddle_offset - 5, (screen_height - 40) / 2, 10, 40};
+    physics_body* p_paddle1 = create_body(&paddle_rect1, VECTOR_2_ZERO);
+    physics_body* p_paddle2 = create_body(&paddle_rect2, VECTOR_2_ZERO);
+
+    // Initialize the ball
+    SDL_Rect ball_rect = {(screen_width - 10) / 2, (screen_height - 10) / 2, 10, 10};
+    physics_body* p_ball = create_body(&ball_rect, ball_initial_velocity);
+
+    // Define the variable holding the state of the program
     int prog_finished = 0;
-    input_manager* p_input_manager = SDL_CreateInputManager();
 
-    // Boucle principale du programme
+    // Define the two players input manager
+    player_input_manager* p_input_manager_p1 = SDL_CreateInputManager(SDLK_z, SDLK_s, SDLK_q, SDLK_d, SDLK_SPACE, SDLK_ESCAPE);
+    player_input_manager* p_input_manager_p2 = SDL_CreateInputManager(SDLK_o, SDLK_l, SDLK_k, SDLK_m, SDLK_p, SDLK_i);
+    player_input_manager* players_input_manager_array[2] = {p_input_manager_p1, p_input_manager_p2};
+
+    // Main loop
     while(prog_finished != 1)
     {
-        // Verifie qu'un evenement a eu lieu, si l'evenement est quit, sort du programme
-        if(events_manager(p_input_manager) == 1){
+        // Check if an event has occured, exit the program if necesary
+        if(events_manager(players_input_manager_array, 2) == 1){
             return EXIT_SUCCESS;
         }
 
-        // Calcule le delta entre deux frames
+        // Compute the delta time between two frames
         Uint32 current_tick = SDL_GetTicks();
         double delta = SDL_GetDelta(current_tick);
 
-        // Attend la bonne quantité de temps pour que le frame rate soit régulier
+        // Wait enough time to regulate the display
         SDL_regulate_FPS(FPS, delta);
+
+        //// PHYSICS ////
+
+        // Move the ball
+        apply_velocity(p_ball);
+
+        // Move the players
+        move_player(p_input_manager_p1, p_paddle1 -> p_shape, 10, VERTICAL);
+        move_player(p_input_manager_p2, p_paddle2 -> p_shape, 10, VERTICAL);
+
+        int collision = FALSE;
+        collision = check_collision(p_ball -> p_shape, p_paddle1 -> p_shape);
+        collision = check_collision(p_ball -> p_shape, p_paddle2 -> p_shape);
+
+        if(collision == TRUE){
+            printf("A collision occured");
+        }
+
+        //// RENDERING ////
 
         // Refresh render
         SDL_SetRenderDrawColor(p_SDL_manager -> p_renderer, 0, 0, 0, 255);
         SDL_RenderClear(p_SDL_manager -> p_renderer);
 
         // Set the draw color to be white
-        SDL_SetRenderDrawColor(p_SDL_manager -> p_renderer, 255, 0, 0, 255);
+        SDL_SetRenderDrawColor(p_SDL_manager -> p_renderer, 255, 255, 255, 255);
 
-        // Draw the paddle
-        SDL_RenderFillRect(p_SDL_manager -> p_renderer, &paddle);
+        // Draw the paddles
+        SDL_RenderFillRect(p_SDL_manager -> p_renderer, p_paddle1 -> p_shape);
+        SDL_RenderFillRect(p_SDL_manager -> p_renderer, p_paddle2 -> p_shape);
 
-        // Move the player
-        move_player(p_input_manager, &paddle, 10, HORIZONTAL);
+        // Draw the ball
+        SDL_RenderFillRect(p_SDL_manager -> p_renderer, p_ball -> p_shape);
 
         // Render
         SDL_RenderPresent(p_SDL_manager -> p_renderer);
     }
 
-    // Libère de la mémoire tous les éléments du manager (Fenètre, renderer, texture)
+    // Free from memory every elements of the manager
     SDL_FreeManager(p_SDL_manager);
 
-    // On quitte la SDL avant de quitter le programme
+    // Quit SDL before leaving th application
     IMG_Quit();
     SDL_Quit();
     return EXIT_SUCCESS;
