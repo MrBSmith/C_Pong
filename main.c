@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include <SDL.h>
 #include <SDL_image.h>
 
@@ -15,11 +16,12 @@
 
 #include "paddle.h"
 #include "PhysicsBody.h"
+#include "pile.h"
 
 int main(int argc, char *argv[])
 {
     // The frames per seconds
-    const int FPS = 20;
+    const int FPS = 60;
 
     SDL_manager* p_SDL_manager = SDL_InitManager();
 
@@ -41,7 +43,7 @@ int main(int argc, char *argv[])
     int paddle_offset = 50;
 
     vector2 VECTOR_2_ZERO = {0, 0};
-    vector2 ball_initial_velocity = {0, 5};
+    vector2 ball_initial_velocity = {2, 2};
 
     // Initialize the paddles
     SDL_Rect paddle_rect1 = {paddle_offset + 5, (screen_height - 40) / 2, 10, 40};
@@ -85,19 +87,38 @@ int main(int argc, char *argv[])
         move_player(p_input_manager_p1, p_paddle1 -> p_shape, 10, VERTICAL);
         move_player(p_input_manager_p2, p_paddle2 -> p_shape, 10, VERTICAL);
 
-        int collisions_reported = 0;
-        if(check_collision(p_ball -> p_shape, p_paddle1 -> p_shape, SDL_TRUE) != NULL) {collisions_reported += 1;}
-        if(check_collision(p_ball -> p_shape, p_paddle2 -> p_shape, SDL_TRUE) != NULL) {collisions_reported += 1;}
+        // Collision detection
+        elem_stack* p_collision_stack = create_stack();
 
-        if(collisions_reported > 0){
-            printf("Collision detected\n");
-            p_ball -> velocity.x *= -1;
-        }
+        collision* p_col1 = check_collision(p_ball -> p_shape, p_paddle1 -> p_shape, SDL_TRUE);
+        if(p_col1 != NULL) { add_to_stack(p_collision_stack, p_col1); }
 
-        if(check_collision(p_ball -> p_shape, &screen_rect, SDL_FALSE) != NULL) {
-            printf("Collision with a wall detected\n");
-            p_ball -> velocity.y *= -1;
-        }
+        collision* p_col2 = check_collision(p_ball -> p_shape, p_paddle2 -> p_shape, SDL_TRUE);
+        if(p_col2 != NULL) { add_to_stack(p_collision_stack, p_col2); }
+
+        collision* p_col3 = check_collision(p_ball -> p_shape, &screen_rect, SDL_FALSE);
+        if(p_col3 != NULL) { add_to_stack(p_collision_stack, p_col3); }
+
+        // Unstack every collision until there are all treated
+        collision* p_col;
+        do{
+            p_col = (collision*) unstack(p_collision_stack);
+            if(p_col != NULL){
+                if(is_collision_lateral(p_col) == SDL_FALSE){
+                    p_ball -> velocity.y *= -1;
+                } else {
+                    if (p_col -> external == SDL_FALSE){ // If the collider is a wall
+                        p_ball -> p_shape -> x = (screen_width - 10) / 2;
+                        p_ball -> p_shape -> y = (screen_height - 10) / 2;
+                        p_paddle1 -> p_shape -> y = (screen_height - 40) / 2;
+                        p_paddle2 -> p_shape -> y = (screen_height - 40) / 2;
+
+                    } else {
+                        p_ball -> velocity.x *= -1;
+                    }
+                }
+            }
+        } while(p_col != NULL);
 
         //// RENDERING ////
 

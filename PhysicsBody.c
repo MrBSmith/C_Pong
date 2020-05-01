@@ -11,16 +11,30 @@ physics_body* create_body(SDL_Rect* p_shape, vector2 initial_velocity){
     return p_new_body;
 }
 
+
 // Creation a collision with the two given colliders
-collision* create_collision(SDL_bool lateral, physics_body* p_body1, physics_body* p_body2){
+collision* create_collision(SDL_Rect* p_shape, SDL_bool external, physics_body* p_body1, physics_body* p_body2){
     collision* p_collision = malloc(sizeof(collision));
-    p_collision -> lateral = lateral;
+    p_collision -> p_shape = p_shape;
+    p_collision -> external = external;
     p_collision -> p_body1 = p_body1;
     p_collision -> p_body2 = p_body2;
-
     return p_collision;
 }
 
+
+// Return SDL_TRUE if the given collision is lateral, SDL_FALSE if it is vertical
+SDL_bool is_collision_lateral(collision* p_collision){
+
+    SDL_Rect* p_shape = p_collision -> p_shape;
+    SDL_bool lateral = SDL_FALSE;
+
+    if(p_shape -> w <= p_shape -> h){
+        lateral = SDL_TRUE;
+    }
+
+    return lateral;
+}
 
 
 // Move the given body, based on his velocity
@@ -31,10 +45,10 @@ void apply_velocity(physics_body* p_body){
 
 
 
-// Check for a collision between the p_shape1 and the p_shape2, return true if there is a collision
+// Check for a collision between the p_shape1 and the p_shape2
+// Create a collision entity if a collision happens, containing a shape that describe the shape of the collision
 collision* check_collision(SDL_Rect* p_shape1, SDL_Rect* p_shape2, SDL_bool extern_collision){
     SDL_bool result = SDL_TRUE;
-    SDL_bool lateral = SDL_FALSE;
     collision* p_collision = NULL;
 
     // define each border of the two shapes
@@ -49,46 +63,32 @@ collision* check_collision(SDL_Rect* p_shape1, SDL_Rect* p_shape2, SDL_bool exte
 
     // Check for a collision
     if(extern_collision == SDL_TRUE){ // extern collision
-        if(bottom1 <= top2){
+        if(bottom1 <= top2 || top1 >= bottom2 || right1 <= left2 || left1 >= right2){
             result = SDL_FALSE;
         }
-        if(top1 >= bottom2){
-            result = SDL_FALSE;
-        }
-        if(right1 <= left2){
-            result = SDL_FALSE;
-        }
-        if(left1 >= right2){
-            result = SDL_FALSE;
-        }
-    } else { // extern collision (When you want to know when p_shape1 is colliding with the border of p_shape2 from within)
+    } else { // intern collision (When you want to know when p_shape1 is colliding with the border of p_shape2 from within)
         if(top1 > top2 && bottom1 < bottom2 && left1 > left2 && right1 < right2){
             result = SDL_FALSE;
         }
     }
 
-    // Construct a collider
+    // Create the collision entity if their was a collision
     if(result == SDL_TRUE){
+
         // Compute the shape of the collision
-        int b_collision = bottom2 - top1;
-        int t_collision = bottom1 - top2;
-        int l_collision = right1 - left2;
-        int r_collision = right2 - left1;
+        int x1 = (int) fmax((float)left1, (float)left2);
+        int y1 = (int) fmax((float)top1, (float)top2);
+        int x2 = (int) fmin((float)right1, (float)right2);
+        int y2 = (int) fmin((float)bottom1, (float)bottom2);
 
-        if (t_collision < b_collision && t_collision < l_collision && t_collision < r_collision){
-            //Top collision
-        }
-        if (b_collision < t_collision && b_collision < l_collision && b_collision < r_collision){
-            //bottom collision
-        }
-        if (l_collision < r_collision && l_collision < t_collision && l_collision < b_collision){
-            lateral = SDL_TRUE;
-        }
-        if (r_collision < l_collision && r_collision < t_collision && r_collision < b_collision){
-            lateral = SDL_TRUE;
-        }
+        SDL_Rect* p_shape = malloc(sizeof(SDL_Rect));
+        p_shape -> x = x1;
+        p_shape -> y = y1;
+        p_shape -> w = x2 - x1;
+        p_shape -> h = y2 - y1;
 
-        p_collision = create_collision(lateral, NULL, NULL);
+        // Construct a collider
+        p_collision = create_collision(p_shape, extern_collision, NULL, NULL);
     }
 
     return p_collision;

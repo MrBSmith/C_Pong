@@ -411,9 +411,10 @@
 	<SDL.h>
 	"vector.h"
 
-1588271594 source:d:\projets programmation\pong\pong\main.c
+1588345385 source:d:\projets programmation\pong\pong\main.c
 	<stdio.h>
 	<stdlib.h>
+	<math.h>
 	<SDL.h>
 	<SDL_image.h>
 	"cercle.h"
@@ -427,6 +428,7 @@
 	"SDL_event.h"
 	"paddle.h"
 	"PhysicsBody.h"
+	"pile.h"
 
 1586336705 d:\projets programmation\pong\pong\map.h
 	<stdio.h>
@@ -483,12 +485,20 @@
 	<stdlib.h>
 	<SDL.h>
 
-1588271771 source:d:\projets programmation\pong\pong\physicsbody.c
+1588338891 source:d:\projets programmation\pong\pong\physicsbody.c
 	"PhysicsBody.h"
 
-1588271433 d:\projets programmation\pong\pong\physicsbody.h
+1588345428 d:\projets programmation\pong\pong\physicsbody.h
 	<stdio.h>
 	<stdlib.h>
+	<math.h>
 	<SDL.h>
 	"vector.h"
+
+1588345298 source:d:\projets programmation\pong\pong\pile.c
+	"pile.h"
+
+1588345233 d:\projets programmation\pong\pong\pile.h
+	<stdio.h>
+	<stdlib.h>
 
